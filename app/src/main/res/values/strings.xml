@@ -2,4 +2,10 @@
     <string name="app_name">Next Three Days</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string-array name="cities_array">
+        <item>ALL</item>
+        <item>Blacksburg</item>
+        <item>Christiansburg</item>
+        <item>Radford</item>
+    </string-array>
 </resources>
