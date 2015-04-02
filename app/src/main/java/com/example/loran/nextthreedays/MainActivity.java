@@ -15,6 +15,23 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+/*
+* LIST OF TODOS
+* Left and right swiping changes days: ontouch events in MainActivity
+* Parsing the website html: write getNextEvent() in Webpage
+* Storing all the events for a given day internally: perhaps another class representing a "Day"
+* writing the "Event" Class
+* Pretty up the xml
+* Add a spinner for Event Type: in xml
+* Apply filters to stored events when user selects: direct filter functions to the "Day" class
+* Pair event type selection with images from website: easy enough, maybe heavy on xml coding
+*
+* Optional
+* Search function
+* leverage fragments
+*
+*
+* */
 
 public class MainActivity extends ActionBarActivity {
 
