@@ -1,5 +1,10 @@
 package com.example.loran.nextthreedays;
 
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.Prediction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -19,30 +24,46 @@ import java.util.ArrayList;
 
 /*
 * LIST OF TODOS
-* Left and right swiping changes days: ontouch events in MainActivity
 * Parsing the website html: write getNextEvent() in Webpage
 * Storing all the events for a given day internally: perhaps another class representing a "Day"
 * writing the "Event" Class
 * Pretty up the xml
+*
 * Apply filters to stored events when user selects: direct filter functions to the "Day" class
 * Pair event type selection with images from website: easy enough, maybe heavy on xml coding
 *
 * Optional
 * Search function
 * leverage fragments
+* Structure of the website:
+* c means city
+* t means type
+* Date means date
+* numbers correspond to selection of multiple categories
 *
+*http://nextthreedays.com/mobile/MobileWebsite.cfm?Date=4/27/15&c=Radford&t=4,3,2,1
 *
 * */
 
-public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener, GestureOverlayView.OnGesturePerformedListener {
 
     //TESTING GITHUBBB
-    private final static String mobileSite = "http://www.nextthreedays.com/mobile/mobilewebsite.cfm";
+    private final static String mobileSite = "http://www.nextthreedays.com/mobile/mobilewebsite.cfm?";
+    private GestureLibrary gestureLib;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        GestureOverlayView gestureOverlayView = new GestureOverlayView(this);
+        View inflate = getLayoutInflater().inflate(R.layout.activity_main, null);
+        gestureOverlayView.addView(inflate);
+        gestureOverlayView.addOnGesturePerformedListener(this);
+        gestureLib = GestureLibraries.fromRawResource(this, R.raw.gestures);
+        if (!gestureLib.load()) {
+            finish();
+        }
+        setContentView(gestureOverlayView);
         ImageView logo =(ImageView) findViewById(R.id.imageView);
         logo.setImageResource(R.drawable.n3dlogo);
         Spinner spinner = (Spinner) findViewById(R.id.spinnerCity);
@@ -94,5 +115,16 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+        ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
+        for (Prediction prediction : predictions) {
+            if (prediction.score > 1.0) {
+                Toast.makeText(this, prediction.name, Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
     }
 }
