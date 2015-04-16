@@ -8,10 +8,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -22,7 +24,6 @@ import java.util.ArrayList;
 * Storing all the events for a given day internally: perhaps another class representing a "Day"
 * writing the "Event" Class
 * Pretty up the xml
-* Add a spinner for Event Type: in xml
 * Apply filters to stored events when user selects: direct filter functions to the "Day" class
 * Pair event type selection with images from website: easy enough, maybe heavy on xml coding
 *
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 *
 * */
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
 
     //TESTING GITHUBBB
     private final static String mobileSite = "http://www.nextthreedays.com/mobile/mobilewebsite.cfm";
@@ -44,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         ImageView logo =(ImageView) findViewById(R.id.imageView);
         logo.setImageResource(R.drawable.n3dlogo);
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerCity);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.cities_array, android.R.layout.simple_spinner_item);
@@ -53,8 +54,16 @@ public class MainActivity extends ActionBarActivity {
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-    }
+        Spinner spinnerE = (Spinner) findViewById(R.id.spinnerEvent);
+        ArrayAdapter<CharSequence> adapterE = ArrayAdapter.createFromResource(this, R.array.events_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerE.setAdapter(adapterE);
 
+
+        spinner.setOnItemSelectedListener(this);
+        spinnerE.setOnItemSelectedListener(this);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,5 +87,12 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(this, parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

@@ -8,4 +8,17 @@
         <item>Christiansburg</item>
         <item>Radford</item>
     </string-array>
+    <string-array name="events_array">
+        <item>ALL</item>
+        <item>Music</item>
+        <item>Food</item>
+        <item>Drink Specials</item>
+        <item>Sports</item>
+        <item>Miscellaneous</item>
+        <item>Family Friendly</item>
+        <item>Arts and Theatre</item>
+        <item>Speaking Engagements</item>
+        <item>Business Related</item>
+        <item>Charity</item>
+    </string-array>
 </resources>
