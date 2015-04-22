@@ -20,4 +20,32 @@ public class Event {
         this.category = category;
         this.description = description;
     }
+
+    public String toString() {
+        return getTitle() + "\n" +
+                getLocation() + "\n" +
+                getTime() + "\n" +
+                getPrice() + "\n" +
+                getCategory() + "\n" +
+                getDescription();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public String getLocation() {
+        return location;
+    }
+    public String getTime() {
+        return time;
+    }
+    public String getPrice() {
+        return price;
+    }
+    public String getCategory() {
+        return category;
+    }
+    public String getDescription() {
+        return description;
+    }
 }
