@@ -6,18 +6,14 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,8 +21,6 @@ import java.util.ArrayList;
 /*
 * LIST OF TODOS
 * Parsing the website html: write getNextEvent() in Webpage
-* Storing all the events for a given day internally: perhaps another class representing a "Day"
-* writing the "Event" Class
 * Pretty up the xml
 *
 * Apply filters to stored events when user selects: direct filter functions to the "Day" class
@@ -45,16 +39,22 @@ import java.util.ArrayList;
 *
 * */
 
-public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener, GestureOverlayView.OnGesturePerformedListener {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener, GestureOverlayView.OnGesturePerformedListener, MultiSpinner.MultiSpinnerListener {
 
-    //TESTING GITHUBBB
-    private final static String mobileSite = "http://www.nextthreedays.com/mobile/mobilewebsite.cfm?";
+
     private GestureLibrary gestureLib;
+
+    private Spinner citySpinner;
+    private MultiSpinner typeSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //backend for user filters
+        //Gesture support setup
         GestureOverlayView gestureOverlayView = new GestureOverlayView(this);
         View inflate = getLayoutInflater().inflate(R.layout.activity_main, null);
         gestureOverlayView.addView(inflate);
@@ -64,25 +64,30 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             finish();
         }
         setContentView(gestureOverlayView);
+
+        //setup for Views in Main Activity
         ImageView logo =(ImageView) findViewById(R.id.imageView);
         logo.setImageResource(R.drawable.n3dlogo);
-        Spinner spinner = (Spinner) findViewById(R.id.spinnerCity);
+        citySpinner = (Spinner) findViewById(R.id.spinnerCity);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.cities_array, android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+        citySpinner.setAdapter(adapter);
 
-        Spinner spinnerE = (Spinner) findViewById(R.id.spinnerEvent);
+        typeSpinner = (MultiSpinner) findViewById(R.id.multi_spinner);
+        
         ArrayAdapter<CharSequence> adapterE = ArrayAdapter.createFromResource(this, R.array.events_array, android.R.layout.simple_spinner_item);
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerE.setAdapter(adapterE);
+        //typeSpinner.setItems(new ArrayList<String>(), getString(R.array.events_array), this);
+        typeSpinner.setAdapter(adapterE);
 
 
-        spinner.setOnItemSelectedListener(this);
-        spinnerE.setOnItemSelectedListener(this);
+        citySpinner.setOnItemSelectedListener(this);
+       // typeSpinner.setOnItemSelectedListener(this);
 
     }
 
@@ -105,12 +110,17 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             return true;
         }
 
+        //TODO add Favorites option
         return super.onOptionsItemSelected(item);
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this, parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+        String found = parent.getItemAtPosition(position).toString();
+        Toast.makeText(this, found, Toast.LENGTH_SHORT).show();
+
     }
+
+    //TODO click function for Go!
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
@@ -126,5 +136,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                         .show();
             }
         }
+    }
+
+    @Override
+    public void onItemsSelected(boolean[] selected) {
+        //TODO
     }
 }

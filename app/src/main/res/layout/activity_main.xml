@@ -46,10 +46,10 @@
                     android:text="Event Types:"
                     android:id="@+id/textView2" />
 
-                <Spinner
+                <com.example.loran.nextthreedays.MultiSpinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/spinnerEvent" />
+                    android:id="@+id/multi_spinner" />
             </LinearLayout>
 
         </LinearLayout>
