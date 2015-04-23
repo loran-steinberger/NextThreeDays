@@ -2,19 +2,30 @@ package mobile;
 
 public class Event {
 
+	private String title;
 	private String place;
 	private String time;
 	private String price;
 	private String location;
 	private String description;
 	
-	public Event(String place, String time, String price, String location, String description)
+	
+	public Event(String title, String place, String time, String price, String location, String description)
 	{
+		this.title = title;
 		this.place = place;
 		this.time = time;
 		this.price = price;
 		this.location = location;
 		this.description = description;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getPlace() {
@@ -56,12 +67,12 @@ public class Event {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public String toString(boolean b)
 	{
 		if (b)
-			return place + " " + time + " " + price + " " + location + " " + description;
+			return title + " " + place + " " + time + " " + price + " " + location + " " + description;
 		else
-			return place + "\n" + time + "\n" + price + "\n" + location + "\n" + description;
+			return title + "\n" + place + "\n" + time + "\n" + price + "\n" + location + "\n" + description;
 	}
 }
