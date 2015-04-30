@@ -59,9 +59,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private Spinner typeSpinner;
     private ListView listView;
     private ArrayList<Event> eventList;
+    private Bundle saved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        this.saved = savedInstanceState;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -194,8 +197,42 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
         String found = parent.getItemAtPosition(position).toString();
         Toast.makeText(this, found, Toast.LENGTH_SHORT).show();
+
+        int month = 4;
+        int day = 30;
+        int year = 15;
+
+        URL url = null;
+        try {
+            url = new URL("http://nextthreedays.com/mobile/AjaxGetDayEvents.cfm?Date="
+                    + month + "/" + day + "/" + year + "&c=" + found  +"&t=");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            eventList = new DownloadFilesTask().execute(url).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        List<String> events = new ArrayList<String>();
+
+        for (int i = 0; i < eventList.size(); i++) {
+            events.add(eventList.get(i).toString(false));
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                events );
+
+        listView.setAdapter(arrayAdapter);
 
     }
 
