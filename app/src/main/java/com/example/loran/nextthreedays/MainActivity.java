@@ -129,7 +129,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         List<String> events = new ArrayList<String>();
 
         for (int i = 0; i < eventList.size(); i++) {
-            events.add(eventList.get(i).toString(true));
+            events.add(eventList.get(i).toString(false));
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
