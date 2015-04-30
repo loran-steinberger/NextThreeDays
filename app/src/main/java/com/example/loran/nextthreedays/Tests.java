@@ -1,6 +1,7 @@
-package mobile;
+package com.example.loran.nextthreedays;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
@@ -8,16 +9,17 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class Tests {
-	public static void main(String[] args) throws IOException {
+	/*public static void main(String[] args) throws IOException {
 		ArrayList<Event> eventsList = insertDate(4, 24, 15);
-	}
+	}*/
 
-	protected static ArrayList<Event> insertDate(int month, int day, int year)
+//	protected static ArrayList<Event> insertDate(int month, int day, int year)
+    protected static ArrayList<Event> insertDate(String url)
 			throws IOException {
 
 		// The url will be changed depends on the input date.
-		String url = "http://nextthreedays.com/mobile/AjaxGetDayEvents.cfm?Date="
-				+ month + "/" + day + "/" + year + "&c=&t=";
+		//String url = "http://nextthreedays.com/mobile/AjaxGetDayEvents.cfm?Date="
+		//		+ month + "/" + day + "/" + year + "&c=&t=";
 
 		// Create and get the document
 		Document doc = Jsoup.connect(url).get();
@@ -41,8 +43,8 @@ public class Tests {
 			Event e = new Event(infos[0], infos[1], infos[2], infos[3], infos[4], infos[5]);
 			list.add(e);
 			
-			System.out.println("---------------------------------------------------------------");
-			System.out.println(e.toString(false));		
+			//System.out.println("---------------------------------------------------------------");
+			//System.out.println(e.toString(false));
 		}
 		return list;
 	}

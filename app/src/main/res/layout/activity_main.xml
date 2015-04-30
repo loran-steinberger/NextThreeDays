@@ -5,7 +5,7 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/scrollView" >
 
         <LinearLayout
@@ -46,12 +46,19 @@
                     android:text="Event Types:"
                     android:id="@+id/textView2" />
 
-                <com.example.loran.nextthreedays.MultiSpinner
+                <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/multi_spinner" />
+                    android:id="@+id/spinnerEvent" />
+
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="443dp"
+        android:id="@+id/listView"
+        android:layout_gravity="center_horizontal|bottom" />
 </FrameLayout>

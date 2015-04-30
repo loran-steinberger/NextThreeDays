@@ -5,6 +5,7 @@ import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,10 +14,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /*
 * LIST OF TODOS
@@ -39,13 +50,15 @@ import java.util.ArrayList;
 *
 * */
 
-public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener, GestureOverlayView.OnGesturePerformedListener, MultiSpinner.MultiSpinnerListener {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener, GestureOverlayView.OnGesturePerformedListener {
 
 
     private GestureLibrary gestureLib;
 
     private Spinner citySpinner;
-    private MultiSpinner typeSpinner;
+    private Spinner typeSpinner;
+    private ListView listView;
+    private ArrayList<Event> eventList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +90,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 // Apply the adapter to the spinner
         citySpinner.setAdapter(adapter);
 
-        typeSpinner = (MultiSpinner) findViewById(R.id.multi_spinner);
+        typeSpinner = (Spinner) findViewById(R.id.spinnerEvent);
         
-        ArrayAdapter<CharSequence> adapterE = ArrayAdapter.createFromResource(this, R.array.events_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapterE = ArrayAdapter.createFromResource(this,
+                R.array.events_array, android.R.layout.simple_spinner_item);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //typeSpinner.setItems(new ArrayList<String>(), getString(R.array.events_array), this);
@@ -89,6 +103,71 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         citySpinner.setOnItemSelectedListener(this);
        // typeSpinner.setOnItemSelectedListener(this);
 
+        listView = (ListView) findViewById(R.id.listView);
+
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
+
+        String[] dateArray = sdf.format(date).split("/");
+
+        URL url = null;
+        try {
+            url = new URL("http://nextthreedays.com/mobile/AjaxGetDayEvents.cfm?Date="
+                    + dateArray[0].replaceFirst("^0+(?!$)", "") + "/" + dateArray[1].replaceFirst("^0+(?!$)", "") + "/" + dateArray[2].replaceFirst("^0+(?!$)", "") + "&c=&t=");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            eventList = new DownloadFilesTask().execute(url).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        List<String> events = new ArrayList<String>();
+
+        for (int i = 0; i < eventList.size(); i++) {
+            events.add(eventList.get(i).toString(true));
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                events );
+
+        listView.setAdapter(arrayAdapter);
+
+    }
+
+    private class DownloadFilesTask extends AsyncTask<URL, Void, ArrayList<Event>> {
+        @Override
+        protected ArrayList<Event> doInBackground(URL... urls) {
+            ArrayList<Event> list = new ArrayList<Event>();
+            try {
+                list = Tests.insertDate(urls[0].toExternalForm());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //System.out.println(list);
+            return list;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            //setProgressPercent(progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Event> list) {
+            super.onPostExecute(list);
+            //setEventList(list);
+        }
+    }
+
+    public void setEventList(ArrayList<Event> list) {
+        for (int i = 0; i < list.size(); i++) {
+            eventList.add(list.get(i));
+        }
     }
 
     @Override
@@ -138,7 +217,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         }
     }
 
-    @Override
+    //@Override
     public void onItemsSelected(boolean[] selected) {
         //TODO
     }
