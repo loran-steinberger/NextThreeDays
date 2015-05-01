@@ -61,11 +61,19 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private ListView listView;
     private ArrayList<Event> eventList;
     private Bundle saved;
+    private String cityName;
+    private String typeNumber;
+    private URL url;
+    private String day;
+    private String month;
+    private String year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         this.saved = savedInstanceState;
+        this.cityName = "";
+        this.typeNumber = "";
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -105,7 +113,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
 
         citySpinner.setOnItemSelectedListener(this);
-       // typeSpinner.setOnItemSelectedListener(this);
+       typeSpinner.setOnItemSelectedListener(this);
 
         listView = (ListView) findViewById(R.id.listView);
 
@@ -113,11 +121,14 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
 
         String[] dateArray = sdf.format(date).split("/");
+        day = dateArray[0].replaceFirst("^0+(?!$)", "");
+        month = dateArray[1].replaceFirst("^0+(?!$)", "");
+        year = dateArray[2].replaceFirst("^0+(?!$)", "");
 
-        URL url = null;
+//        URL url = null;
         try {
             url = new URL("http://nextthreedays.com/mobile/AjaxGetDayEvents.cfm?Date="
-                    + dateArray[0].replaceFirst("^0+(?!$)", "") + "/" + dateArray[1].replaceFirst("^0+(?!$)", "") + "/" + dateArray[2].replaceFirst("^0+(?!$)", "") + "&c=&t=");
+                    + day  + "/" + month + "/" + year + "&c=" + cityName + "&t=" + typeNumber);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -203,14 +214,38 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         String found = parent.getItemAtPosition(position).toString();
         Toast.makeText(this, found, Toast.LENGTH_SHORT).show();
 
-        int month = 4;
-        int day = 30;
-        int year = 15;
+        if (!found.equals("All Cities") || !found.equals("All Events")){
+            if(found.equals("Blacksburg") || found.equals("Christiansburg")||found.equals("Radford"))
+                cityName = found;
+            else{
+                if(found.equals("Music")){
+                    typeNumber = "1";
+                } else if(found.equals("Food")){
+                    typeNumber = "2";
+                } else if(found.equals("Drinks")){
+                    typeNumber = "3";
+                } else if(found.equals("Sports")){
+                    typeNumber = "4";
+                } else if(found.equals("Misc")){
+                    typeNumber = "5";
+                } else if(found.equals("Family")){
+                    typeNumber = "6";
+                } else if(found.equals("Arts")){
+                    typeNumber = "7";
+                } else if(found.equals("Speaking")){
+                    typeNumber = "8";
+                } else if(found.equals("Business")){
+                    typeNumber = "9";
+                } else if(found.equals("Charity")){
+                    typeNumber = "10";
+                }
+            }
+        }
 
-        URL url = null;
+
         try {
             url = new URL("http://nextthreedays.com/mobile/AjaxGetDayEvents.cfm?Date="
-                    + month + "/" + day + "/" + year + "&c=" + found  +"&t=");
+                    + month + "/" + day + "/" + year + "&c=" + cityName  +"&t=" + typeNumber);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
