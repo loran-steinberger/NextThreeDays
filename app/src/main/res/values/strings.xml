@@ -3,22 +3,22 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string-array name="cities_array">
-        <item>ALL</item>
+        <item>All Cities</item>
         <item>Blacksburg</item>
         <item>Christiansburg</item>
         <item>Radford</item>
     </string-array>
     <string-array name="events_array">
-        <item>ALL</item>
+        <item>All Events</item>
         <item>Music</item>
         <item>Food</item>
-        <item>Drink Specials</item>
+        <item>Drinks</item>
         <item>Sports</item>
-        <item>Miscellaneous</item>
-        <item>Family Friendly</item>
-        <item>Arts and Theatre</item>
-        <item>Speaking Engagements</item>
-        <item>Business Related</item>
+        <item>Misc</item>
+        <item>Family</item>
+        <item>Arts</item>
+        <item>Speaking</item>
+        <item>Business</item>
         <item>Charity</item>
     </string-array>
 </resources>

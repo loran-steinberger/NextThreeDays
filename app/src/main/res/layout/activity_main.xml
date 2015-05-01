@@ -3,12 +3,7 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context=".MainActivity" tools:ignore="MergeRootFrame" >
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView" >
-
-        <LinearLayout
+           <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
@@ -21,7 +16,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -38,7 +33,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -47,18 +42,23 @@
                     android:id="@+id/textView2" />
 
                 <Spinner
+                    android:layout_toRightOf="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/spinnerEvent" />
 
             </LinearLayout>
 
-        </LinearLayout>
-    </ScrollView>
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="443dp"
-        android:id="@+id/listView"
-        android:layout_gravity="center_horizontal|bottom" />
+               <ListView
+
+                   android:layout_width="fill_parent"
+                   android:layout_height="fill_parent"
+                   android:id="@+id/listView"
+                   android:layout_gravity="center_horizontal|bottom" />
+        </LinearLayout>
+
+
+
+
 </FrameLayout>
