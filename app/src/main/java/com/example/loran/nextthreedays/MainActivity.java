@@ -123,14 +123,20 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
 
         String[] dateArray = sdf.format(date).split("/");
-        day = dateArray[0].replaceFirst("^0+(?!$)", "");
-        month = dateArray[1].replaceFirst("^0+(?!$)", "");
+        day = dateArray[1].replaceFirst("^0+(?!$)", "");
+        month = dateArray[0].replaceFirst("^0+(?!$)", "");
         year = dateArray[2].replaceFirst("^0+(?!$)", "");
 
 //        URL url = null;
+        regenerateList();
+
+
+    }
+
+    private void regenerateList() {
         try {
             url = new URL("http://nextthreedays.com/mobile/AjaxGetDayEvents.cfm?Date="
-                    + day  + "/" + month + "/" + year + "&c=" + cityName + "&t=" + typeNumber);
+                    + month  + "/" + day + "/" + year + "&c=" + cityName + "&t=" + typeNumber);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -143,6 +149,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             e.printStackTrace();
         }
 
+
         List<String> events = new ArrayList<String>();
 
         for (int i = 0; i < eventList.size(); i++) {
@@ -154,7 +161,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 events );
 
         listView.setAdapter(arrayAdapter);
-
     }
 
     /**
@@ -213,6 +219,42 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         }
     }
 
+    private void increaseDay() {
+        int dae = Integer.parseInt(this.day);
+        if(dae < 28) {
+            day = Integer.toString(++dae);
+            return;
+        }
+        int mon = Integer.parseInt(this.month);
+        if(mon == 2) {
+            month = "3";
+            day = "1";
+            return;
+        }
+        if(dae < 30) {
+            day = Integer.toString(++dae);
+            return;
+        }
+        if(mon == 4 || mon == 6 || mon == 9 || mon == 11) {
+            month = Integer.toString(++mon);
+            day = "1";
+            return;
+        }
+        if(dae < 31) {
+            day = Integer.toString(++dae);
+            return;
+        }
+        if(mon == 12) {
+            int yer = Integer.parseInt(year);
+            year = Integer.toString(++yer);
+            month = "1";
+            day = "1";
+            return;
+        }
+        month = Integer.toString(++mon);
+        day = "1";
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -242,10 +284,15 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         String found = parent.getItemAtPosition(position).toString();
         Toast.makeText(this, found, Toast.LENGTH_SHORT).show();
 
-        if (!found.equals("All Cities") || !found.equals("All Events")){
-            if(found.equals("Blacksburg") || found.equals("Christiansburg")||found.equals("Radford"))
-                cityName = found;
-            else{
+        if (found.equals("All Cities")) {
+            cityName = "";
+        }
+        else if(found.equals("All Events")){
+            typeNumber = "";
+        }
+           else if(found.equals("Blacksburg") || found.equals("Christiansburg")||found.equals("Radford")) {
+            cityName = found;
+        } else{
                 if(found.equals("Music")){
                     typeNumber = "1";
                 } else if(found.equals("Food")){
@@ -268,39 +315,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     typeNumber = "10";
                 }
             }
-        }
 
-
-        try {
-            url = new URL("http://nextthreedays.com/mobile/AjaxGetDayEvents.cfm?Date="
-                    + month + "/" + day + "/" + year + "&c=" + cityName  +"&t=" + typeNumber);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            eventList = new DownloadFilesTask().execute(url).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        List<String> events = new ArrayList<String>();
-
-        for (int i = 0; i < eventList.size(); i++) {
-            events.add(eventList.get(i).toString(false));
-        }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                events );
-
-        listView.setAdapter(arrayAdapter);
+            regenerateList();
 
     }
 
-    //TODO click function for Go!
+
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
@@ -314,6 +334,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             if (prediction.score > 1.0) {
                 Toast.makeText(this, prediction.name, Toast.LENGTH_SHORT)
                         .show();
+                if(prediction.name.equals("next")) {
+                    increaseDay();
+                    regenerateList();
+                }
             }
         }
     }
