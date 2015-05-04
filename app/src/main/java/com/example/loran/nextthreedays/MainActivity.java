@@ -364,12 +364,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 if(prediction.name.equals("next")) {
                     increaseDay();
                     regenerateList();
-                    dateView.setText(month + "/" + day + "/" + year);
                 }
                 else if(prediction.name.equals("previous")) {
                     decreaseDay();
                     regenerateList();
                 }
+                dateView.setText(month + "/" + day + "/" + year);
             }
         }
     }
