@@ -16,7 +16,8 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:weightSum="1">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -25,14 +26,15 @@
                     android:id="@+id/textView" />
 
                 <Spinner
-                    android:layout_width="wrap_content"
+                    android:layout_width="164dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/spinnerCity" />
+
             </LinearLayout>
 
-            <LinearLayout
+               <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="fill_parent"
+                android:layout_width="184dp"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -43,12 +45,18 @@
 
                 <Spinner
                     android:layout_toRightOf="@+id/textView2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/spinnerEvent" />
 
             </LinearLayout>
 
+
+               <TextView
+                   android:layout_width="175dp"
+                   android:layout_height="31dp"
+                   android:id="@+id/textDate"
+                   android:text="Date" />
 
                <ListView
 

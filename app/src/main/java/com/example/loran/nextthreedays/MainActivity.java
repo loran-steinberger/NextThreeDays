@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -58,6 +59,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     private Spinner citySpinner;
     private Spinner typeSpinner;
+    private TextView dateView;
     private ListView listView;
     private ArrayList<Event> eventList;
     private ArrayList<Event> favs;
@@ -71,6 +73,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
 
         this.saved = savedInstanceState;
         this.cityName = "";
@@ -105,7 +108,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         citySpinner.setAdapter(adapter);
 
         typeSpinner = (Spinner) findViewById(R.id.spinnerEvent);
-        
+
         ArrayAdapter<CharSequence> adapterE = ArrayAdapter.createFromResource(this,
                 R.array.events_array, android.R.layout.simple_spinner_item);
 
@@ -118,6 +121,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
        typeSpinner.setOnItemSelectedListener(this);
 
         listView = (ListView) findViewById(R.id.listView);
+        dateView = (TextView) findViewById(R.id.textDate);
 
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
@@ -126,6 +130,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         day = dateArray[1].replaceFirst("^0+(?!$)", "");
         month = dateArray[0].replaceFirst("^0+(?!$)", "");
         year = dateArray[2].replaceFirst("^0+(?!$)", "");
+
+        dateView.setText(month + "/" + day + "/" + year);
 
 //        URL url = null;
         regenerateList();
@@ -358,6 +364,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 if(prediction.name.equals("next")) {
                     increaseDay();
                     regenerateList();
+                    dateView.setText(month + "/" + day + "/" + year);
                 }
                 else if(prediction.name.equals("previous")) {
                     decreaseDay();
