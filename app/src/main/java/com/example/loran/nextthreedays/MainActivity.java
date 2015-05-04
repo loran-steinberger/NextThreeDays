@@ -51,7 +51,7 @@ import java.util.concurrent.ExecutionException;
 *
 * */
 
-public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener, GestureOverlayView.OnGesturePerformedListener {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener, GestureOverlayView.OnGesturePerformedListener, ListView.OnItemClickListener{
 
 
     private GestureLibrary gestureLib;
@@ -60,6 +60,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private Spinner typeSpinner;
     private ListView listView;
     private ArrayList<Event> eventList;
+    private ArrayList<Event> favs;
     private Bundle saved;
     private String cityName;
     private String typeNumber;
@@ -78,6 +79,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(favs == null) favs = new ArrayList<Event>();
         //backend for user filters
         //Gesture support setup
         GestureOverlayView gestureOverlayView = new GestureOverlayView(this);
@@ -153,6 +155,32 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         listView.setAdapter(arrayAdapter);
 
+    }
+
+    /**
+     * Callback method to be invoked when an item in this AdapterView has
+     * been clicked.
+     * <p/>
+     * Implementers can call getItemAtPosition(position) if they need
+     * to access the data associated with the selected item.
+     *
+     * @param parent   The AdapterView where the click happened.
+     * @param view     The view within the AdapterView that was clicked (this
+     *                 will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
+     * @param id       The row id of the item that was clicked.
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Event found = (Event) parent.getItemAtPosition(position);
+        if(favs.contains(found)) {
+            favs.remove(found);
+            Toast.makeText(this, "unfavorited!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            favs.add(found);
+            Toast.makeText(this, "favorited!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private class DownloadFilesTask extends AsyncTask<URL, Void, ArrayList<Event>> {
@@ -290,8 +318,4 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         }
     }
 
-    //@Override
-    public void onItemsSelected(boolean[] selected) {
-        //TODO
-    }
 }
