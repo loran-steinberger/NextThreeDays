@@ -255,6 +255,27 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         day = "1";
     }
 
+    public void decreaseDay() {
+        int dae = Integer.parseInt(this.day);
+        if(dae > 1) {
+            day = Integer.toString(--dae);
+            return;
+        }
+        int mon = Integer.parseInt(this.month);
+        if(mon > 1) {
+            month = Integer.toString(--mon);
+        }
+        else {
+            int yer = Integer.parseInt(year);
+            year = Integer.toString(--yer);
+            month = "12";
+        }
+
+        if(mon == 2) day = "28";
+        else if(mon == 4 || mon == 6 || mon == 9 || mon == 11) day = "30";
+        else day = "31";
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -336,6 +357,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                         .show();
                 if(prediction.name.equals("next")) {
                     increaseDay();
+                    regenerateList();
+                }
+                else if(prediction.name.equals("previous")) {
+                    decreaseDay();
                     regenerateList();
                 }
             }
