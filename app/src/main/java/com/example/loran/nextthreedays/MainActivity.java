@@ -70,10 +70,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private String day;
     private String month;
     private String year;
+    private Pebble pebble;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        pebble = new Pebble(this);
 
         this.saved = savedInstanceState;
         this.cityName = "";
@@ -118,7 +120,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
 
         citySpinner.setOnItemSelectedListener(this);
-       typeSpinner.setOnItemSelectedListener(this);
+        typeSpinner.setOnItemSelectedListener(this);
 
         listView = (ListView) findViewById(R.id.listView);
         dateView = (TextView) findViewById(R.id.textDate);
@@ -188,10 +190,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         if(favs.contains(found)) {
             favs.remove(found);
             Toast.makeText(this, "unfavorited!", Toast.LENGTH_SHORT).show();
+            pebble.sendAlertToPebble("You have set" + found.toString(true) + "as a favorite!");
         }
         else {
             favs.add(found);
             Toast.makeText(this, "favorited!", Toast.LENGTH_SHORT).show();
+            pebble.sendAlertToPebble("You have set" + found.toString(true) + "as a favorite!");
         }
     }
 
@@ -295,6 +299,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        int pos = item.getOrder();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
