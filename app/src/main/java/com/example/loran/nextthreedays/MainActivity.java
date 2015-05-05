@@ -1,5 +1,6 @@
 package com.example.loran.nextthreedays;
 
+import android.annotation.TargetApi;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -7,6 +8,7 @@ import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.AsyncTask;
 
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -72,6 +74,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private String year;
     private Pebble pebble;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -84,7 +87,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(favs == null) favs = new ArrayList<Event>();
+        if(favs == null) favs = new ArrayList<>();
         //backend for user filters
         //Gesture support setup
         GestureOverlayView gestureOverlayView = new GestureOverlayView(this);
@@ -134,12 +137,11 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         month = dateArray[0].replaceFirst("^0+(?!$)", "");
         year = dateArray[2].replaceFirst("^0+(?!$)", "");
 
-<<<<<<< HEAD
-=======
+
         dateView.setText(month + "/" + day + "/" + year);
 
 //        URL url = null;
->>>>>>> origin/master
+
         regenerateList();
 
 
@@ -308,6 +310,35 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if(id == R.id.favorites) {
+
+            List<String> events = new ArrayList<>();
+
+            for (int i = 0; i < favs.size(); i++) {
+                events.add(favs.get(i).toString(false));
+            }
+
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    events);
+
+            listView.setAdapter(arrayAdapter);
+        }
+        if(id == R.id.search) {
+            List<String> events = new ArrayList<>();
+
+            for (int i = 0; i < eventList.size(); i++) {
+                events.add(eventList.get(i).toString(false));
+            }
+
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    events);
+
+            listView.setAdapter(arrayAdapter);
         }
 
         //TODO add Favorites option
