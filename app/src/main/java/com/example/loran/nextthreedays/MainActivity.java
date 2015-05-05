@@ -119,6 +119,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         listView = (ListView) findViewById(R.id.listView);
 
+        listView.setOnItemClickListener(this);
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
 
@@ -127,7 +128,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         month = dateArray[0].replaceFirst("^0+(?!$)", "");
         year = dateArray[2].replaceFirst("^0+(?!$)", "");
 
-//        URL url = null;
         regenerateList();
 
 
@@ -150,7 +150,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         }
 
 
-        List<String> events = new ArrayList<String>();
+        List<String> events = new ArrayList<>();
 
         for (int i = 0; i < eventList.size(); i++) {
             events.add(eventList.get(i).toString(false));
@@ -178,7 +178,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Event found = (Event) parent.getItemAtPosition(position);
+        Event found = (Event) eventList.get(position);
         if(favs.contains(found)) {
             favs.remove(found);
             Toast.makeText(this, "unfavorited!", Toast.LENGTH_SHORT).show();
