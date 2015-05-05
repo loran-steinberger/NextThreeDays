@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -58,6 +59,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     private Spinner citySpinner;
     private Spinner typeSpinner;
+    private TextView dateView;
     private ListView listView;
     private ArrayList<Event> eventList;
     private ArrayList<Event> favs;
@@ -68,9 +70,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private String day;
     private String month;
     private String year;
+    private Pebble pebble;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        pebble = new Pebble(this);
 
         this.saved = savedInstanceState;
         this.cityName = "";
@@ -105,7 +110,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         citySpinner.setAdapter(adapter);
 
         typeSpinner = (Spinner) findViewById(R.id.spinnerEvent);
-        
+
         ArrayAdapter<CharSequence> adapterE = ArrayAdapter.createFromResource(this,
                 R.array.events_array, android.R.layout.simple_spinner_item);
 
@@ -115,9 +120,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
 
         citySpinner.setOnItemSelectedListener(this);
-       typeSpinner.setOnItemSelectedListener(this);
+        typeSpinner.setOnItemSelectedListener(this);
 
         listView = (ListView) findViewById(R.id.listView);
+        dateView = (TextView) findViewById(R.id.textDate);
 
         listView.setOnItemClickListener(this);
         Date date = new Date();
@@ -128,6 +134,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         month = dateArray[0].replaceFirst("^0+(?!$)", "");
         year = dateArray[2].replaceFirst("^0+(?!$)", "");
 
+<<<<<<< HEAD
+=======
+        dateView.setText(month + "/" + day + "/" + year);
+
+//        URL url = null;
+>>>>>>> origin/master
         regenerateList();
 
 
@@ -182,10 +194,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         if(favs.contains(found)) {
             favs.remove(found);
             Toast.makeText(this, "unfavorited!", Toast.LENGTH_SHORT).show();
+            pebble.sendAlertToPebble("You have set" + found.toString(true) + "as a favorite!");
         }
         else {
             favs.add(found);
             Toast.makeText(this, "favorited!", Toast.LENGTH_SHORT).show();
+            pebble.sendAlertToPebble("You have set" + found.toString(true) + "as a favorite!");
         }
     }
 
@@ -289,6 +303,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        int pos = item.getOrder();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -363,6 +378,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     decreaseDay();
                     regenerateList();
                 }
+                dateView.setText(month + "/" + day + "/" + year);
             }
         }
     }
