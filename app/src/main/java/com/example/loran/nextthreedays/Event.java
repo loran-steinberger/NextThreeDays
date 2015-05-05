@@ -9,6 +9,15 @@ public class Event {
     private String location;
     private String description;
 
+    public Event(String all) {
+        String[] tokens = all.split("\n");
+        title = tokens[0];
+        place = tokens[1];
+        time = tokens[2];
+        price = tokens[3];
+        location = tokens[4];
+        description = tokens[5];
+    }
 
     public Event(String title, String place, String time, String price, String location, String description)
     {

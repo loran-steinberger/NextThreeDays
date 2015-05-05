@@ -1,6 +1,7 @@
 package com.example.loran.nextthreedays;
 
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -30,7 +31,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 /*
@@ -86,6 +89,20 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        if(favs == null) {
+            favs = new ArrayList();
+            SharedPreferences settings = getPreferences(0);
+            Set<String> founders = settings.getStringSet("favorites", null);
+            if (founders != null) {
+                for(String found : founders) {
+                    favs.add(new Event(found));
+                }
+            }
+        }
+
+
 
         if(favs == null) favs = new ArrayList<>();
         //backend for user filters
@@ -145,6 +162,24 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         regenerateList();
 
 
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+
+        // We need an Editor object to make preference changes.
+        // All objects are from android.context.Context
+        SharedPreferences settings = getPreferences(0);
+        SharedPreferences.Editor editor = settings.edit();
+        HashSet<String> saving = new HashSet();
+        for(Event e : favs) {
+            saving.add(e.toString(false));
+        }
+        editor.putStringSet("favorites", saving);
+
+        // Commit the edits!
+        editor.commit();
     }
 
     private void regenerateList() {
@@ -341,7 +376,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             listView.setAdapter(arrayAdapter);
         }
 
-        //TODO add Favorites option
         return super.onOptionsItemSelected(item);
     }
 
@@ -399,7 +433,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
         for (Prediction prediction : predictions) {
             if (prediction.score > 1.0) {
-                Toast.makeText(this, prediction.name, Toast.LENGTH_SHORT)
+                Toast.makeText(this, prediction.name  , Toast.LENGTH_SHORT)
                         .show();
                 if(prediction.name.equals("next")) {
                     increaseDay();

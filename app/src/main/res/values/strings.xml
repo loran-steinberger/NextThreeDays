@@ -2,6 +2,8 @@
     <string name="app_name">Next Three Days</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="favorites">Favorites</string>
+    <string name="search">Search</string>
     <string-array name="cities_array">
         <item>All Cities</item>
         <item>Blacksburg</item>
