@@ -231,12 +231,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         if(favs.contains(found)) {
             favs.remove(found);
             Toast.makeText(this, "unfavorited!", Toast.LENGTH_SHORT).show();
-            pebble.sendAlertToPebble("You have set" + found.toString(true) + "as a favorite!");
+            pebble.sendAlertToPebble("Unfavorited " + found.toString(true));
         }
         else {
             favs.add(found);
             Toast.makeText(this, "favorited!", Toast.LENGTH_SHORT).show();
-            pebble.sendAlertToPebble("You have set" + found.toString(true) + "as a favorite!");
+            pebble.sendAlertToPebble("Favorited " + found.toString(true));
         }
     }
 
